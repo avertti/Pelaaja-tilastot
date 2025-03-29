@@ -1,2 +1,6 @@
 __pycache__
 venv
+database.db
+Pelaaja-tilastot/
+db.py:Zone.Identifier
+schema.sql:Zone.Identifier
