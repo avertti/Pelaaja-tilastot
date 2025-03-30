@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import config
 import sqlite3
+import items
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -27,8 +28,8 @@ def create_item():
     APG = request.form["APG"]
     user_id = session["user_id"]
 
-    sql = """INSERT INTO items (name, team, player_number, PPG, RPG, APG, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"""
-    db.execute(sql, [name, team, player_number, PPG, RPG, APG, user_id])
+    items.add_item(name, team, player_number, PPG, RPG, APG, user_id)
+
     return redirect("/")
 
 @app.route("/register")
