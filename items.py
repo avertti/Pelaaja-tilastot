@@ -10,13 +10,25 @@ def get_items():
     return db.query(sql)
 
 def get_item(item_id):
-    sql= """SELECT items.name,
+    sql= """SELECT items.id,
+                   items.name,
                    items.team,
                    items.player_number,
                    items.PPG,
                    items.RPG,
                    items.APG,
+                   users.id user_id,
                    users.username
             FROM items, users
             WHERE items.user_id=users.id AND items.id=?"""
     return db.query(sql,[item_id])[0]
+
+def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
+    sql = """UPDATE items SET name = ?,
+                            team = ?,
+                            player_number = ?,
+                            PPG = ?,
+                            RPG = ?,
+                            APG = ?
+                        WHERE id = ?"""
+    db.execute(sql, [name, team, player_number, PPG, RPG, APG, item_id])
