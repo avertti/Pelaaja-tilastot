@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Uusi pelaaja</title>
+</head>
+
+<body>
+    <h1>Uusi pelaaja</h1>
+  <form action="/create_item" method="post">
+    <p>
+      Nimi: <br />
+      <input type="text" name="name" />
+    </p>
+    <p>
+      Joukkue: <br />
+      <input type="text" name="team" />
+    </p>
+    <p>
+      Pelinumero: <br />
+      <input type="number" name="player_number" size="5" max="99" min="00" required/>
+    </p>
+     PPG: <br />
+      <input type="number" step="0.1" name="PPG" size="5" />
+    </p>
+    <p>
+      RPG: <br />
+      <input type="number" step="0.1" name="RPG" size="5" />
+    </p>
+    <p>
+      APG: <br />
+      <input type="number" step="0.1"  name="APG" size="5" />
+    </p>
+    <input type="submit" value="Luo pelaaja" />
+  </form>
+</body>
+
+</html>

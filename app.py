@@ -13,6 +13,24 @@ app.secret_key = config.secret_key
 def index():
     return render_template("index.html")
 
+@app.route("/new_item")
+def new_item():
+    return render_template("new_item.html")
+
+@app.route("/create_item", methods=["POST"])
+def create_item():
+    name = request.form["name"]
+    team = request.form["team"]
+    player_number = request.form["player_number"]
+    PPG = request.form["PPG"]
+    RPG = request.form["RPG"]
+    APG = request.form["APG"]
+    user_id = session["user_id"]
+
+    sql = """INSERT INTO items (name, team, player_number, PPG, RPG, APG, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [name, team, player_number, PPG, RPG, APG, user_id])
+    return redirect("/")
+
 @app.route("/register")
 def register():
     return render_template("register.html")
@@ -38,13 +56,19 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("login.html")
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        sql = "SELECT password_hash FROM users WHERE username = ?"
-        password_hash = db.query(sql, [username])[0][0]
+
+        sql = "SELECT id, password_hash FROM users WHERE username = ?"
+        result = db.query(sql, [username])
+        user_id = result[0]["id"]
+        password_hash = result[0]["password_hash"]
+
 
     if check_password_hash(password_hash, password):
+        session["user_id"] = user_id
         session["username"] = username
         return redirect("/")
     else:
@@ -53,5 +77,6 @@ def login():
 @app.route("/logout")
 def logout():
     del session["username"]
+    del session["user_id"]
     return redirect("/")
 
