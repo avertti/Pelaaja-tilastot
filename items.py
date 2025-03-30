@@ -32,3 +32,8 @@ def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
                             APG = ?
                         WHERE id = ?"""
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, item_id])
+
+def remove_item(item_id):
+    sql = "DELETE FROM items WHERE id = ?"
+    db.execute(sql, [item_id])
+
