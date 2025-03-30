@@ -3,3 +3,20 @@ import db
 def add_item(name, team, player_number, PPG, RPG, APG, user_id):
     sql = """INSERT INTO items (name, team, player_number, PPG, RPG, APG, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, user_id])
+
+def get_items():
+    sql = "SELECT id, name FROM items ORDER BY id DESC"
+
+    return db.query(sql)
+
+def get_item(item_id):
+    sql= """SELECT items.name,
+                   items.team,
+                   items.player_number,
+                   items.PPG,
+                   items.RPG,
+                   items.APG,
+                   users.username
+            FROM items, users
+            WHERE items.user_id=users.id AND items.id=?"""
+    return db.query(sql,[item_id])[0]
