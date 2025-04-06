@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ user.username }}</title>
+</head>
+
+<body>
+    <h1>{{ user.username }}</h1>
+     <p>
+      Käyttäjä on lisännyt {{ items | count }} pelaajaa.
+    </p>
+    <h2>Pelaajat</h2>
+    <ul>
+      {% for item in items %}
+      <li><a href="/item/{{ item.id }}">{{ item.name }}</a></li>
+      {% endfor %}
+    <p>
+      <a href="/">Takaisin</a>
+    </p>
+</body>
+
+</html>
