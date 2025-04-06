@@ -1,6 +1,12 @@
-# Pelaaja-tilastot
+# Pelaajatilastot
 
+Nykytilanne:
+Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
+Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan pelaajia.
+Käyttäjä näkee sovellukseen lisätyt pelaajat.
+Käyttäjä pystyy etsimään pelaajia nimen ja joukkueen perusteella.
 
+Tavoite:
 Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 Käyttäjä pystyy lisäämään sovellukseen NBA-pelaajia ja heidän tilastojaan esim. joukkue,pelinumero,pelipaikka,PPG,RPG,APG,SPG. Käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään pelaajia tai tilastoja.
 Käyttäjä näkee sovellukseen lisättyjen pelaajien tilastot. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät pelaajat.
