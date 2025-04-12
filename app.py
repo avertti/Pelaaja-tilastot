@@ -44,7 +44,8 @@ def show_item(item_id):
     item = items.get_item(item_id)
     if not item:
         abort(404)
-    return render_template("show_item.html", item=item)
+    classes = items.get_classes(item_id)
+    return render_template("show_item.html", item=item, classes=classes)
 
 @app.route("/new_item")
 def new_item():
@@ -62,7 +63,16 @@ def create_item():
     APG = request.form["APG"]
     user_id = session["user_id"]
 
-    items.add_item(name, team, player_number, PPG, RPG, APG, user_id)
+    classes=[]
+    position = request.form["position"]
+    if position:
+        classes.append(("Pelipaikka", position))
+
+    accolades = request.form.getlist("accolades[]")
+    for accolade in accolades:
+        classes.append(("Palkinnot", accolade))
+
+    items.add_item(name, team, player_number, PPG, RPG, APG, user_id, classes)
 
     return redirect("/")
 
@@ -108,6 +118,7 @@ def remove_item(item_id):
         return render_template("remove_item.html", item=item)
     if request.method == "POST":
         if ("remove" in request.form):
+            items.remove_item_classes(item_id)
             items.remove_item(item_id)
             return redirect("/")
         else:

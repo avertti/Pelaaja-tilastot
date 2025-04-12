@@ -1,8 +1,18 @@
 import db
 
-def add_item(name, team, player_number, PPG, RPG, APG, user_id):
+def add_item(name, team, player_number, PPG, RPG, APG, user_id, classes):
     sql = """INSERT INTO items (name, team, player_number, PPG, RPG, APG, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, user_id])
+
+    item_id=db.last_insert_id()
+
+    sql = "INSERT INTO item_classes (item_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [item_id, title, value])
+
+def get_classes(item_id):
+    sql = "SELECT title, value FROM item_classes WHERE item_id = ?"
+    return db.query(sql, [item_id])
 
 def get_items():
     sql = "SELECT id, name FROM items ORDER BY id DESC"
@@ -36,6 +46,10 @@ def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
 
 def remove_item(item_id):
     sql = "DELETE FROM items WHERE id = ?"
+    db.execute(sql, [item_id])
+
+def remove_item_classes(item_id):
+    sql = "DELETE FROM item_classes WHERE item_id = ?"
     db.execute(sql, [item_id])
 
 def find_items(query):

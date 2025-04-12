@@ -14,3 +14,10 @@ CREATE TABLE items (
     APG REAL,
     user_id INTEGER REFERENCES users
 );
+
+CREATE TABLE item_classes (
+    id INTEGER PRIMARY KEY,
+    item_id INTEGER REFERENCES items ON DELETE CASCADE,
+    title TEXT,
+    value TEXT
+);
