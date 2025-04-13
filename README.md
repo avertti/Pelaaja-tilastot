@@ -5,6 +5,8 @@ Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 Käyttäjä pystyy lisäämään, muokkaamaan ja poistamaan pelaajia.
 Käyttäjä näkee sovellukseen lisätyt pelaajat.
 Käyttäjä pystyy etsimään pelaajia nimen ja joukkueen perusteella.
+Käyttäjä voi luokitella ja etsiä pelaajia erilaisten palkintojen perusteella. 
+Käyttäjä voi lisätä arvion omasta tai toisen lisäämässtä pelaajasta.
 
 Tavoite:
 Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
@@ -12,5 +14,5 @@ Käyttäjä pystyy lisäämään sovellukseen NBA-pelaajia ja heidän tilastojaa
 Käyttäjä näkee sovellukseen lisättyjen pelaajien tilastot. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät pelaajat.
 Käyttäjä pystyy etsimään pelaajia nimen, pelipaikan ja joukkueen perusteella.
 Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja ja käyttäjän lisäämät pelaajat.
-Käyttäjä pystyy valitsemaan pelaajille yhden tai useamman luokittelun esim. joukkue tai pelipaikka.
+Käyttäjä pystyy valitsemaan pelaajille yhden tai useamman luokittelun esim. erilaiset palkinnot tai pelipaikka.
 Käyttäjä pystyy arvostelemaan itse lisättyjä ja muiden käyttäjien lisäämiä pelaajia.

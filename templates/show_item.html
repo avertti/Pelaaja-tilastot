@@ -35,6 +35,20 @@
       </ul>
     </p>
     {% endif %}
+    <h2>Arviot</h2>
+    <ul>
+      {% for rating in ratings %}
+      <li>{{ rating.rating }}, <a href="/user/{{ rating.user_id }}">{{ rating.username }}</a></li>
+      {% endfor %}
+    </ul>
+    <h2>Uusi arvio</h2>
+    <form action="/new_rating" method="post">
+      Arvio (1-5): <br />
+      <input type="number" name="rating" min="1" max="5" />
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <br />
+      <input type="submit" value="Arvioi pelaaja" />
+    </form>
     <p>
       <a href="/">Takaisin</a>
     </p>
