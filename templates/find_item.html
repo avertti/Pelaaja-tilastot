@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Etsi pelaaja</title>
-</head>
+{% block title %}Etsi pelaaja{% endblock %}
 
-<body>
-  <h1>Etsi pelaaja</h1>
+{% block content %}
+  <h2>Etsi pelaaja</h2>
   <form action="/find_item" method="get">
     <p>
       Hakusana: <input type="text" name="query" value="{{ query }}">
@@ -22,10 +19,8 @@
   <h2>Tulokset</h2>
   <ul>
     {% for item in results %}
-    <li><a href="/item/{{ item.id }}">{{ item.name }}</a></li>
+    <li><a href="/item/{{ item.item_id }}">{{ item.name }}</a></li>
      {% endfor %}
   </ul>
    {% endif %}
-</body>
-
-</html>
+{% endblock %}

@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Tietojen muokkaus</title>
-</head>
+{% block title %}Tietojen muokkaus{% endblock %}
 
-<body>
-    <h1>Tietojen muokkaus</h1>
+{% block content %}
+    <h2>Tietojen muokkaus</h2>
   <form action="/update_item" method="post">
     <p>
       Nimi: <br />
@@ -34,6 +31,4 @@
     <input type="hidden" name="item_id" value="{{ item.id }}" />
     <input type="submit" value="Päivitä tietoja" />
   </form>
-</body>
-
-</html>
+{% endblock %}

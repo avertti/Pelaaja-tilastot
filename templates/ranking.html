@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}Kirjaudu sisään{% endblock %}
+
+{% block content %}
+<h2>Pelaajaranking</h2>
+
+<div class="player-list">
+  {% for item in rankings %}
+    <div class="player-card">
+      {{ loop.index }}. <a href="/item/{{ item.id }}">{{ item.name }}</a> - Keskiarvo: {{item.avg_rating}}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ item.name }}</title>
-</head>
+{% block title %}{{ item.title}}{% endblock %}
 
-<body>
-    <h1>{{ item.name }}</h1>
+{% block content %}
+    <h2>{{ item.name }}</h2>
     {% if session.user_id == item.user_id %}
   <p>
     <a href= "/edit_item/{{ item.id }}">Muokkaa</a>
@@ -35,23 +32,44 @@
       </ul>
     </p>
     {% endif %}
-    <h2>Arviot</h2>
+
+    <h3>Arviot</h3>
     <ul>
       {% for rating in ratings %}
       <li>{{ rating.rating }}, <a href="/user/{{ rating.user_id }}">{{ rating.username }}</a></li>
       {% endfor %}
     </ul>
-    <h2>Uusi arvio</h2>
+
+    <h3>Uusi arvio</h3>
     <form action="/new_rating" method="post">
       Arvio (1-5): <br />
       <input type="number" name="rating" min="1" max="5" />
+      <br />
       <input type="hidden" name="item_id" value="{{ item.id }}">
       <br />
-      <input type="submit" value="Arvioi pelaaja" />
+      <input type="submit" value="Lähetä arvio" />
     </form>
+
+    <h3>Kommentit:</h3>
+    <ul>
+      {% for comment in comments %}
+      <li>"{{ comment.text }}" (<a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>)</li>
+      {% endfor %}
+   </ul>
+
+   <h3>Uusi kommentti</h3>
+   <form action="/new_comment" method="post">
+      Kommentti: <br />
+      <textarea name="comment" rows="3" cols="30" placeholder="Kirjoita kommentti..."></textarea>
+      <br />
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <br />
+      <input type="submit" value="Lähetä kommentti" />
+   </form>
     <p>
       <a href="/">Takaisin</a>
     </p>
-</body>
 
-</html>
+    <h3>Pelaajaranking keskiarvo: {{ avg_rating }}</h3>
+
+{% endblock %}

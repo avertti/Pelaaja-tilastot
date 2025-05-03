@@ -21,6 +21,17 @@ def get_ratings(item_id):
            ORDER BY ratings.id DESC"""
     return db.query(sql, [item_id])
 
+def add_comment(item_id, user_id, comment):
+    sql = """INSERT INTO comments (item_id, user_id, text) VALUES (?, ?, ?)"""
+    db.execute(sql, [item_id, user_id, comment])
+
+def get_comments(item_id):
+    sql = """SELECT comments.text, users.id AS user_id,            users.username
+           FROM comments, users
+           WHERE comments.item_id = ? AND comments.user_id = users.id
+           ORDER BY comments.id DESC"""
+    return db.query(sql, [item_id])
+
 def get_classes(item_id):
     sql = "SELECT title, value FROM item_classes WHERE item_id = ?"
     return db.query(sql, [item_id])
@@ -56,11 +67,22 @@ def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, item_id])
 
 def remove_item(item_id):
+    remove_comments(item_id)
+    remove_item_classes(item_id)
+    remove_ratings(item_id)
     sql = "DELETE FROM items WHERE id = ?"
     db.execute(sql, [item_id])
 
 def remove_item_classes(item_id):
     sql = "DELETE FROM item_classes WHERE item_id = ?"
+    db.execute(sql, [item_id])
+
+def remove_comments(item_id):
+    sql = "DELETE FROM comments WHERE item_id = ?"
+    db.execute(sql, [item_id])
+
+def remove_ratings(item_id):
+    sql = "DELETE FROM ratings WHERE item_id = ?"
     db.execute(sql, [item_id])
 
 def find_items(query):
@@ -71,3 +93,26 @@ def find_items(query):
            ORDER BY items.id DESC"""
     like= "%" + query + "%"
     return db.query(sql,[like, like, like])
+
+def get_rankings():
+    sql = """SELECT items.id, items.name, ROUND(AVG(ratings.rating),2) as avg_rating
+    FROM itemS JOIN ratings ON items.id = ratings.item_id
+    GROUP BY items.id ORDER BY avg_rating DESC"""
+    rankings = db.query(sql)
+
+    for ranking in rankings:
+        sql_insert = """INSERT INTO rankings (player_id,avg_rating)
+        VALUES (?,?)"""
+    return rankings
+
+def get_avg_rating(item_id):
+    result = db.query("""
+        SELECT ROUND(AVG(rating), 2) AS avg_rating
+        FROM ratings
+        WHERE item_id = ?
+    """, (item_id,))
+
+    if result:
+        avg_rating = result[0]["avg_rating"]
+        return avg_rating if avg_rating else "Ei arvosanoja"
+    return "Ei arvosanoja"

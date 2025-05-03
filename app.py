@@ -32,7 +32,6 @@ def find_item():
     query = request.args.get("query")
     if query:
         results = items.find_items(query)
-
     else:
         query=""
         results=[]
@@ -46,7 +45,9 @@ def show_item(item_id):
         abort(404)
     classes = items.get_classes(item_id)
     ratings = items.get_ratings(item_id)
-    return render_template("show_item.html", item=item, classes=classes, ratings=ratings)
+    comments = items.get_comments(item_id)
+    avg_rating = items.get_avg_rating(item_id)
+    return render_template("show_item.html", item=item, classes=classes, ratings=ratings, comments=comments, avg_rating=avg_rating)
 
 @app.route("/new_item")
 def new_item():
@@ -77,6 +78,11 @@ def create_item():
 
     return redirect("/")
 
+@app.route("/ranking")
+def ranking():
+    rankings = items.get_rankings()
+    return render_template("ranking.html", rankings=rankings)
+
 @app.route("/new_rating", methods=["POST"])
 def new_rating():
     require_login()
@@ -88,6 +94,20 @@ def new_rating():
     user_id = session["user_id"]
 
     items.add_rating(item_id, user_id, rating)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/new_comment", methods=["POST"])
+def new_comment():
+    require_login()
+    text=request.form["comment"]
+    item_id=request.form["item_id"]
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    user_id = session["user_id"]
+
+    items.add_comment(item_id, user_id, text)
 
     return redirect("/item/" + str(item_id))
 
@@ -133,6 +153,7 @@ def remove_item(item_id):
         return render_template("remove_item.html", item=item)
     if request.method == "POST":
         if ("remove" in request.form):
+            items.remove_comments(item_id)
             items.remove_item_classes(item_id)
             items.remove_item(item_id)
             return redirect("/")
@@ -154,10 +175,10 @@ def create():
         return "VIRHE: salasanat eivät ole samat"
 
     try:
-        users.create_user(username, password)
+        users.create_user(username, password1)
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
-    return "Tunnus luotu"
+    return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

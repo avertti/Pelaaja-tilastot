@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Uusi pelaaja</title>
-</head>
+{% block title %}Uusi pelaaja{% endblock %}
 
-<body>
-    <h1>Uusi pelaaja</h1>
+{% block content %}
+    <h2>Uusi pelaaja</h2>
   <form action="/create_item" method="post">
     <p>
       Nimi: <br />
@@ -58,7 +55,8 @@
     </p>
 
     <input type="submit" value="Luo pelaaja" />
+    <p>
+      <a href="/">Takaisin</a>
+    </p>
   </form>
-</body>
-
-</html>
+{% endblock %}

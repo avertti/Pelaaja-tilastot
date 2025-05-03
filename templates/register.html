@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Rekisteröinti</title>
-</head>
+{% block title %}Kirjaudu sisään{% endblock %}
 
-<body>
+{% block content %}
+<h2>Luo tunnus</h2>
+
   <form action="/create" method="post">
     <p>
       Tunnus: <br />
@@ -22,8 +21,5 @@
     <input type="submit" value="Luo tunnus" />
   </form>
 
-   <p><a href="/">← Takaisin etusivulle</a></p>
-
-</body>
-
-</html>
+   <p><a href="/">Takaisin etusivulle</a></p>
+{% endblock %}

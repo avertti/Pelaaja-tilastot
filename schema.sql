@@ -16,7 +16,7 @@ CREATE TABLE items (
 );
 CREATE TABLE ratings (
     id INTEGER PRIMARY KEY,
-    item_id INTEGER REFERENCES items,
+    item_id INTEGER REFERENCES items ON DELETE CASCADE,
     user_id INTEGER REFERENCES users,
     rating INTEGER
 );
@@ -25,4 +25,17 @@ CREATE TABLE item_classes (
     item_id INTEGER REFERENCES items ON DELETE CASCADE,
     title TEXT,
     value TEXT
+);
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    item_id INTEGER REFERENCES items ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users,
+    text TEXT
+);
+CREATE TABLE rankings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT
+    player_id INTEGER,
+    avg_rating REAL,
+    rankings_date TIMESTAMP DEFAULT CURRENT_ITEMSTAMP,
+    FOREIGN KEY (player_id) REFERENCES items(id)
 );

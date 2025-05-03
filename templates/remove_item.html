@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Pelaajan poisto</title>
-</head>
+{% block title %}Pelaajan poisto{% endblock %}
 
-<body>
-    <h1>Pelaajan poisto</h1>
+{% block content %}
+    <h2>Pelaajan poisto</h2>
     <p> Poistuva pelaaja: {{ item.name }}</p>
     <p> Haluatko varmasti poistaa tämän pelaajan?</p>
   <form action="/remove_item/{{ item.id }}" method="post">
     <input type="submit" name="remove" value="Poista pelaaja">
     <input type="submit" name="back" value="Palaa takaisin">
   </form>
-</body>
-
-</html>
+{% endblock %}
