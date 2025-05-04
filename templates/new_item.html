@@ -5,6 +5,7 @@
 {% block content %}
     <h2>Uusi pelaaja</h2>
   <form action="/create_item" method="post">
+     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <p>
       Nimi: <br />
       <input type="text" name="name" />
@@ -41,19 +42,18 @@
     </p>
     <p>
       Palkinnot: <br />
-        <lable><input type="checkbox" name="accolades[]" value="All-star">All-star</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="All-NBA 1st">All-NBA 1st</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="All-NBA 2nd">All-NBA 2nd</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="All-NBA 3rd">All-NBA 3rd</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="All-defensive">All-defensive</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="DPY">DPY</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="MVP">MVP</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="Champion">Champion</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="HOF">HOF</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="MIP">MIP</lable><br>
-        <lable><input type="checkbox" name="accolades[]" value="6th man of the year">6th man of the year</lable><br>
+        <label><input type="checkbox" name="accolades[]" value="All-star">All-star</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 1st">All-NBA 1st</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 2nd">All-NBA 2nd</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 3rd">All-NBA 3rd</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-defensive">All-defensive</label><br>
+        <label><input type="checkbox" name="accolades[]" value="DPY">DPY</label><br>
+        <label><input type="checkbox" name="accolades[]" value="MVP">MVP</label><br>
+        <label><input type="checkbox" name="accolades[]" value="Champion">Champion</label><br>
+        <label><input type="checkbox" name="accolades[]" value="HOF">HOF</label><br>
+        <label><input type="checkbox" name="accolades[]" value="MIP">MIP</label><br>
+        <label><input type="checkbox" name="accolades[]" value="6th man of the year">6th man of the year</label><br>
     </p>
-
     <input type="submit" value="Luo pelaaja" />
     <p>
       <a href="/">Takaisin</a>

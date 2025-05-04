@@ -5,6 +5,7 @@ import config
 import sqlite3
 import items
 import users
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -13,10 +14,17 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
+
+
 @app.route("/")
 def index():
     all_items = items.get_items()
-    return render_template("index.html", items=all_items)
+    return render_template("index.html", items = all_items)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
@@ -24,7 +32,7 @@ def show_user(user_id):
     if not user:
         abort(404)
     items = users.get_items(user_id)
-    return render_template("show_user.html", items=items, user=user)
+    return render_template("show_user.html", items = items, user = user)
 
 
 @app.route("/find_item")
@@ -33,10 +41,10 @@ def find_item():
     if query:
         results = items.find_items(query)
     else:
-        query=""
-        results=[]
+        query = ""
+        results = []
 
-    return render_template("find_item.html", query=query, results=results)
+    return render_template("find_item.html", query = query, results = results)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
@@ -47,26 +55,33 @@ def show_item(item_id):
     ratings = items.get_ratings(item_id)
     comments = items.get_comments(item_id)
     avg_rating = items.get_avg_rating(item_id)
-    return render_template("show_item.html", item=item, classes=classes, ratings=ratings, comments=comments, avg_rating=avg_rating)
+    return render_template("show_item.html", item = item, classes = classes, ratings = ratings, comments = comments, avg_rating = avg_rating)
 
 @app.route("/new_item")
 def new_item():
     require_login()
     return render_template("new_item.html")
 
-@app.route("/create_item", methods=["POST"])
+@app.route("/create_item", methods = ["POST"])
 def create_item():
     require_login()
+    check_csrf()
     name = request.form["name"]
     team = request.form["team"]
     player_number = request.form["player_number"]
     PPG = request.form["PPG"]
     RPG = request.form["RPG"]
     APG = request.form["APG"]
-    user_id = session["user_id"]
-
-    classes=[]
     position = request.form["position"]
+    user_id = session.get("user_id")
+
+    if not name or len(name) > 100 or "<" in name or ">" in name:
+        return "Virheellinen nimi"
+    if not team or len(team) > 100 or "<" in name or ">" in name:
+        return "Virheellinen joukkue"
+
+
+    classes = []
     if position:
         classes.append(("Pelipaikka", position))
 
@@ -81,13 +96,14 @@ def create_item():
 @app.route("/ranking")
 def ranking():
     rankings = items.get_rankings()
-    return render_template("ranking.html", rankings=rankings)
+    return render_template("ranking.html", rankings = rankings)
 
-@app.route("/new_rating", methods=["POST"])
+@app.route("/new_rating", methods = ["POST"])
 def new_rating():
     require_login()
-    rating=request.form["rating"]
-    item_id=request.form["item_id"]
+    check_csrf()
+    rating = request.form["rating"]
+    item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
         abort(404)
@@ -97,11 +113,12 @@ def new_rating():
 
     return redirect("/item/" + str(item_id))
 
-@app.route("/new_comment", methods=["POST"])
+@app.route("/new_comment", methods = ["POST"])
 def new_comment():
     require_login()
-    text=request.form["comment"]
-    item_id=request.form["item_id"]
+    check_csrf()
+    text = request.form["comment"]
+    item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
         abort(404)
@@ -119,12 +136,13 @@ def edit_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-    return render_template("edit_item.html", item=item)
+    return render_template("edit_item.html", item = item)
 
-@app.route("/update_item", methods=["POST"])
+@app.route("/update_item", methods = ["POST"])
 def update_item():
     require_login()
-    item_id=request.form["item_id"]
+    check_csrf()
+    item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
         abort(404)
@@ -138,7 +156,16 @@ def update_item():
     RPG = request.form["RPG"]
     APG = request.form["APG"]
 
-    items.update_item(item_id, name, team, player_number, PPG, RPG, APG,)
+    classes = []
+    position = request.form["position"]
+    if position:
+        classes.append(("Pelipaikka", position))
+
+    accolades = request.form.getlist("accolades[]")
+    for accolade in accolades:
+        classes.append(("Palkinnot", accolade))
+
+    items.update_item(item_id, name, team, player_number, PPG, RPG, APG, classes)
 
     return redirect("/item/" + str(item_id))
 
@@ -152,6 +179,7 @@ def remove_item(item_id):
     if request.method == "GET":
         return render_template("remove_item.html", item=item)
     if request.method == "POST":
+        check_csrf()
         if ("remove" in request.form):
             items.remove_comments(item_id)
             items.remove_item_classes(item_id)
@@ -180,7 +208,7 @@ def create():
         return "VIRHE: tunnus on jo varattu"
     return redirect("/")
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods = ["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
@@ -189,10 +217,12 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        user_id=users.check_login(username, password)
+        user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
+            print(session)
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"

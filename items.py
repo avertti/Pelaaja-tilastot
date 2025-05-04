@@ -4,7 +4,7 @@ def add_item(name, team, player_number, PPG, RPG, APG, user_id, classes):
     sql = """INSERT INTO items (name, team, player_number, PPG, RPG, APG, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, user_id])
 
-    item_id=db.last_insert_id()
+    item_id = db.last_insert_id()
 
     sql = "INSERT INTO item_classes (item_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
@@ -42,7 +42,7 @@ def get_items():
     return db.query(sql)
 
 def get_item(item_id):
-    sql= """SELECT items.id,
+    sql = """SELECT items.id,
                    items.name,
                    items.team,
                    items.player_number,
@@ -56,7 +56,7 @@ def get_item(item_id):
     result = db.query(sql,[item_id])
     return result[0] if result else None
 
-def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
+def update_item(item_id, name, team, player_number, PPG, RPG, APG, classes):
     sql = """UPDATE items SET name = ?,
                             team = ?,
                             player_number = ?,
@@ -65,6 +65,11 @@ def update_item(item_id, name, team, player_number, PPG, RPG, APG,):
                             APG = ?
                         WHERE id = ?"""
     db.execute(sql, [name, team, player_number, PPG, RPG, APG, item_id])
+
+    remove_item_classes(item_id)
+    sql_class = "INSERT INTO item_classes (item_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql_class, [item_id, title, value])
 
 def remove_item(item_id):
     remove_comments(item_id)
@@ -85,8 +90,12 @@ def remove_ratings(item_id):
     sql = "DELETE FROM ratings WHERE item_id = ?"
     db.execute(sql, [item_id])
 
+def remove_item_accolades(item_id):
+    sql = "DELETE FROM item_accolades WHERE item:id = ?"
+    db.execute(sql, [item_id])
+
 def find_items(query):
-    sql="""SELECT items.id AS item_id, items.name
+    sql = """SELECT items.id AS item_id, items.name
            FROM items
            LEFT JOIN item_classes ON items.id = item_classes.item_id
            WHERE name LIKE ? OR team LIKE ? OR item_classes.value LIKE ?

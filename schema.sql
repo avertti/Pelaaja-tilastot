@@ -39,3 +39,9 @@ CREATE TABLE rankings (
     rankings_date TIMESTAMP DEFAULT CURRENT_ITEMSTAMP,
     FOREIGN KEY (player_id) REFERENCES items(id)
 );
+
+CREATE TABLE item_accolades (
+    id INTEGER KEY AUTOINCREMENT,
+    item_id INTEGER REFERENCES items(id) ON DELETE CASCADE,
+    accolade TEXT
+);

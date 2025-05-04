@@ -2,19 +2,24 @@ import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_user(user_id):
-    sql= """SELECT id, username
+    sql = """SELECT id, username
             FROM users
             WHERE id = ?"""
     result = db.query(sql,[user_id])
     return result[0] if result else None
 
 def get_items(user_id):
-    sql= """SELECT id, name
+    sql = """SELECT id, name
             FROM items
             WHERE user_id = ? ORDER BY id DESC"""
     return db.query(sql,[user_id])
 
 def create_user(username, password):
+    if not username or len(username) > 20:
+        raise ValueError("Käyttäjänimi on ei käy. Käyttäjänimi pitää olla alle 20 merkkiä pitkä")
+    if ">" in username or ">" in username:
+        raise ValueError("Käyttäjänimessä laittomia merkkejä")
+
     password_hash = generate_password_hash(password)
     sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
     db.execute(sql, [username, password_hash])

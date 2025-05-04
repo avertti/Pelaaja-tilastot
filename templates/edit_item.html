@@ -29,6 +29,33 @@
       <input type="number" step="0.1"  name="APG" size="5" value="{{ item.APG }}" />
     </p>
     <input type="hidden" name="item_id" value="{{ item.id }}" />
+     <p>
+      Pelipaikka: <br />
+      <select name="position">
+        <option value="">(valitse)</option>
+        <option value="PG" {% if item.position == "PG" %}selected{% endif %}>PG</option>
+        <option name="SG" {% if item.position == "SG" %}selected{% endif %}>SG</option>
+        <option name="SF" {% if item.position == "SF" %}selected{% endif %}>SF</option>
+        <option name="PF" {% if item.position == "PF" %}selected{% endif %}>PF</option>
+        <option name="C" {% if item.position == "C" %}selected{% endif %}>C</option>
+      </select>
+    </p>
+    <p>
+      Palkinnot: <br />
+        <label><input type="checkbox" name="accolades[]" value="All-star" {% if "All-star" in item.accolades %}checked{% endif %}>All-star</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 1st" {% if "All-NBA 1st" in item.accolades %}checked{% endif %}>All-NBA 1st</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 2nd" {% if "All-NBA 2nd" in item.accolades %}checked{% endif %}>All-NBA 2nd</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-NBA 3rd" {% if "All-NBA 3rd" in item.accolades %}checked{% endif %}>All-NBA 3rd</label><br>
+        <label><input type="checkbox" name="accolades[]" value="All-defensive {% if "All-defensive" in item.accolades %}checked{% endif %}">All-defensive</label><br>
+        <label><input type="checkbox" name="accolades[]" value="DPY" {% if "DPY" in item.accolades %}checked{% endif %}>DPY</label><br>
+        <label><input type="checkbox" name="accolades[]" value="MVP" {% if "MVP" in item.accolades %}checked{% endif %}>MVP</label><br>
+        <label><input type="checkbox" name="accolades[]" value="Champion" {% if "Champion" in item.accolades %}checked{% endif %}>Champion</label><br>
+        <label><input type="checkbox" name="accolades[]" value="HOF" {% if "HOF" in item.accolades %}checked{% endif %}>HOF</label><br>
+        <label><input type="checkbox" name="accolades[]" value="MIP" {% if "MIP" in item.accolades %}checked{% endif %}>MIP</label><br>
+        <label><input type="checkbox" name="accolades[]" value="6th man of the year" {% if "6th man of the year" in item.accolades %}checked{% endif %}>6th man of the year</label><br>
+    </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Päivitä tietoja" />
+
   </form>
 {% endblock %}
