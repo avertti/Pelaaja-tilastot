@@ -114,5 +114,5 @@ def get_avg_rating(item_id):
 
     if result:
         avg_rating = result[0]["avg_rating"]
-        return avg_rating if avg_rating else "Ei arvosanoja"
-    return "Ei arvosanoja"
+        return avg_rating if avg_rating else "Ei arvioita"
+    return "Ei arvioita"

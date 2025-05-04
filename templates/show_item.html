@@ -41,6 +41,7 @@
     </ul>
 
     <h3>Uusi arvio</h3>
+    {% if session.user_id %}
     <form action="/new_rating" method="post">
       Arvio (1-5): <br />
       <input type="number" name="rating" min="1" max="5" />
@@ -49,6 +50,11 @@
       <br />
       <input type="submit" value="Lähetä arvio" />
     </form>
+    {% else %}
+    <P>
+      <em>Kirjaudu sisään voidaksesi arvioida pelaajan.</em>
+    </p>
+    {% endif %}
 
     <h3>Kommentit:</h3>
     <ul>
@@ -58,6 +64,7 @@
    </ul>
 
    <h3>Uusi kommentti</h3>
+    {% if session.user_id %}
    <form action="/new_comment" method="post">
       Kommentti: <br />
       <textarea name="comment" rows="3" cols="30" placeholder="Kirjoita kommentti..."></textarea>
@@ -66,6 +73,12 @@
       <br />
       <input type="submit" value="Lähetä kommentti" />
    </form>
+   {% else %}
+    <P>
+      <em>Kirjaudu sisään voidaksesi kommentoida.</em>
+    </p>
+    {% endif %}
+
     <p>
       <a href="/">Takaisin</a>
     </p>
